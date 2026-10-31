@@ -13,8 +13,8 @@ export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
-
+  ) { }
+  // =========================================================================
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // =========================================================================
     // TODO: [BÀI TẬP 1] - Hoàn thiện JwtAuthGuard
@@ -27,7 +27,9 @@ export class JwtAuthGuard implements CanActivate {
     // 6. Trả về true để cho phép request đi tiếp.
     // =========================================================================
 
-    // Tạm thời cho đi tiếp để app chạy khởi động (Học viên xoá dòng dưới và viết code TODO)
+
+
+    // =========================================================================
     return true;
   }
 }
