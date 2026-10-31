@@ -1,0 +1,109 @@
+### ============================================================================
+### FILE TEST API NHANH (Dùng với VS Code REST Client hoặc Thunder Client)
+### ============================================================================
+
+@baseUrl = http://localhost:3000
+
+### 1. Đăng nhập để lấy JWT Token
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "name": "Alice Johnson"
+}
+
+### Lưu token từ kết quả đăng nhập phía trên vào biến
+@authToken = {{login.response.body.access_token}}
+
+
+### ============================================================================
+### KIỂM THỬ BÀI TẬP 1: JWT AUTH GUARD
+### ============================================================================
+
+### 2a. Gửi email không có Token -> Mong đợi: 401 Unauthorized
+POST {{baseUrl}}/notifications/user
+Content-Type: application/json
+
+{
+  "to": "bob@example.com",
+  "subject": "Test Guard: Không kèm token",
+  "content": "Email này sẽ bị chặn bởi JwtAuthGuard!"
+}
+
+### 2b. Gửi email có Token hợp lệ -> Mong đợi: 200 OK (Thành công)
+POST {{baseUrl}}/notifications/user
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "to": "bob@example.com",
+  "subject": "Test Guard: Kèm token hợp lệ",
+  "content": "Chúc mừng bạn đã vượt qua JwtAuthGuard!"
+}
+
+
+### ============================================================================
+### KIỂM THỬ BÀI TẬP 2: SANITIZE CONTENT PIPE
+### ============================================================================
+
+### 3. Gửi email chứa thẻ <script> nguy hiểm -> Mong đợi: Thẻ script bị lọc sạch
+POST {{baseUrl}}/notifications/user
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "to": "bob@example.com",
+  "subject": "Cảnh báo bảo mật XSS",
+  "content": "<script>alert('Hack thành công!')</script>   Xin chào Bob, đây là nội dung đã được làm sạch!   "
+}
+
+
+### ============================================================================
+### KIỂM THỬ BÀI TẬP 3: RESPONSE TIME INTERCEPTOR
+### ============================================================================
+
+### 4. Gửi email kiểm tra định dạng Response chuẩn và đo thời gian Latency
+# Mong đợi JSON trả về có dạng:
+# {
+#   "success": true,
+#   "duration": "215ms",
+#   "data": { ... }
+# }
+POST {{baseUrl}}/notifications/user
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "to": "charlie@example.com",
+  "subject": "Kiểm tra Response Time Interceptor",
+  "content": "Request này sẽ được đo thời gian xử lý qua RxJS!"
+}
+
+
+### ============================================================================
+### KIỂM THỬ GỬI EMAIL CHO TOÀN BỘ NHÓM (GROUP NOTIFICATION)
+### ============================================================================
+
+### 5. Gửi thông báo cho toàn bộ thành viên trong nhóm DEV_TEAM
+POST {{baseUrl}}/notifications/group
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "groupName": "DEV_TEAM",
+  "subject": "Họp khẩn cấp toàn đội ngũ Developer",
+  "content": "Chào mừng cả team tham gia hands-on lab NestJS Core!"
+}
+
+### 6. Gửi thông báo cho nhóm không tồn tại -> Mong đợi: 404 Not Found
+POST {{baseUrl}}/notifications/group
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "groupName": "NON_EXISTING_GROUP",
+  "subject": "Test lỗi",
+  "content": "Nhóm này không tồn tại trong database"
+}
