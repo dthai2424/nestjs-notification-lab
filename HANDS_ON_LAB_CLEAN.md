@@ -66,9 +66,14 @@ Sau khi hoàn thành bài thực hành từ 35 đến 45 phút, người học s
 
 Để triển khai dự án từ mã nguồn khởi đầu (Starter Code) hoặc khởi tạo từ đầu, người học thực hiện theo quy trình 6 bước lệnh chuẩn hóa sau:
 
-### Bước 1: Cài đặt thư viện phụ thuộc và Công cụ Prisma ORM
-Tại thư mục gốc của dự án, chạy lệnh cài đặt toàn bộ các gói thư viện phụ thuộc:
+### Bước 1: Tải mã nguồn Starter Code và Cài đặt thư viện phụ thuộc
+Người học tải mã nguồn khởi đầu từ GitHub Repository chính thức của nhóm:
 ```bash
+# Clone nhánh starter-code (mã nguồn khởi đầu chưa có lời giải)
+git clone -b starter-code https://github.com/dthai2424/nestjs-notification-lab.git
+cd nestjs-notification-lab
+
+# Cài đặt toàn bộ các gói thư viện phụ thuộc
 npm install
 ```
 > **Ghi chú về khởi tạo Prisma từ đầu (Prisma Setup from Scratch):**  
