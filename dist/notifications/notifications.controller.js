@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const notifications_service_1 = require("./notifications.service");
 const send_user_dto_1 = require("./dto/send-user.dto");
 const send_group_dto_1 = require("./dto/send-group.dto");
+const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
 let NotificationsController = class NotificationsController {
     constructor(notificationsService) {
         this.notificationsService = notificationsService;
@@ -33,6 +34,7 @@ let NotificationsController = class NotificationsController {
 exports.NotificationsController = NotificationsController;
 __decorate([
     (0, common_1.Post)('user'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -41,6 +43,7 @@ __decorate([
 ], NotificationsController.prototype, "sendToUser", null);
 __decorate([
     (0, common_1.Post)('group'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),

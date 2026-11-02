@@ -19,6 +19,16 @@ let JwtAuthGuard = class JwtAuthGuard {
         this.configService = configService;
     }
     async canActivate(context) {
+        const request = context.switchToHttp().getRequest();
+        const authHeader = request.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            throw new common_1.UnauthorizedException('Token không tồn tại');
+        }
+        const [type, token] = authHeader.split(' ');
+        const payload = await this.jwtService.verifyAsync(token, {
+            secret: this.configService.get('JWT_SECRET'),
+        });
+        request.user = payload;
         return true;
     }
 };

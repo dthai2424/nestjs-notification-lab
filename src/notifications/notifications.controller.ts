@@ -35,7 +35,7 @@ export class NotificationsController {
   // 2. Gắn @UsePipes(new SanitizeContentPipe()) để làm sạch nội dung email
   // ===========================================================================
   @Post('user')
-  // @UseGuards(JwtAuthGuard) // <-- Bỏ comment khi làm xong Bài 1
+  @UseGuards(JwtAuthGuard)
   // @UsePipes(new SanitizeContentPipe()) // <-- Bỏ comment khi làm xong Bài 2
   async sendToUser(@Body() body: SendUserDto, @Req() req: Request): Promise<any> {
     const sender = req['user'];
@@ -49,7 +49,7 @@ export class NotificationsController {
   // 2. Gắn @UsePipes(new SanitizeContentPipe()) để làm sạch nội dung email
   // ===========================================================================
   @Post('group')
-  // @UseGuards(JwtAuthGuard) // <-- Bỏ comment khi làm xong Bài 1
+  @UseGuards(JwtAuthGuard)
   // @UsePipes(new SanitizeContentPipe()) // <-- Bỏ comment khi làm xong Bài 2
   async sendToGroup(@Body() body: SendGroupDto, @Req() req: Request): Promise<any> {
     const sender = req['user'];
